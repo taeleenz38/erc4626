@@ -15,14 +15,14 @@ const Deposit = () => {
         <AccordionItem value="item-1">
           <AccordionTrigger className="font-bold">Deposit</AccordionTrigger>
           <AccordionContent className="flex-col w-full justify-center items-center">
-            <div className="w-full items-center gap-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input className="w-full" type="text" id="email" placeholder="Email" />
+            <div className="w-full items-center gap-1.5 mb-5">
+              <Label htmlFor="amount">Amount</Label>
+              <Input className="w-full mt-2" type="text" id="amount" placeholder="Enter the amount you wish to deposit:" />
             </div>
-            <div className="w-full items-center gap-1.5 mt-5">
-              <Label htmlFor="email">Email</Label>
-              <Input className="w-full" type="text" id="email" placeholder="Email" />
-            </div>
+            {/* <div className="w-full items-center gap-1.5 mb-5">
+              <Label htmlFor="pool">Pool</Label>
+              <Input className="w-full mt-2" type="text" id="pool" placeholder="Select the pool you wish to deposit to:" />
+            </div> */}
           </AccordionContent>
         </AccordionItem>
       </Accordion>

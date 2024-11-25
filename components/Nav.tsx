@@ -16,6 +16,10 @@ const links = [
     name: "admin",
     path: "/admin",
   },
+  {
+    name: "borrower",
+    path: "/borrower",
+  },
 ];
 
 const Nav = () => {
