@@ -8,20 +8,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const Deposit = () => {
+const FundLoan = () => {
   return (
     <>
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="font-bold">Deposit</AccordionTrigger>
-          <AccordionContent className="flex-col w-full justify-center items-center">
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="font-bold">Fund Loan</AccordionTrigger>
+          <AccordionContent>
             <div className="w-full items-center gap-1.5 mb-5">
               <Label htmlFor="amount">Amount</Label>
               <Input
                 className="w-full mt-2"
                 type="text"
                 id="amount"
-                placeholder="Enter the amount you wish to deposit:"
+                placeholder="Enter the amount you wish to withdraw:"
               />
             </div>
           </AccordionContent>
@@ -31,4 +31,4 @@ const Deposit = () => {
   );
 };
 
-export default Deposit;
+export default FundLoan;
