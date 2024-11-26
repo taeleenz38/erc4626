@@ -35,11 +35,14 @@ const metadata = {
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: [sepolia, mainnet, avalanche, base, optimism, polygon,],
+  networks: [sepolia, mainnet, avalanche, base, optimism, polygon],
   defaultNetwork: sepolia,
   metadata: metadata,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
+  },
+  themeVariables: {
+    "--w3m-accent": "#1c1c22",
   },
 });
 
