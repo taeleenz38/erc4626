@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import DeployPool from "@/components/DeployPool";
 import AddInvestor from "@/components/AddInvestor";
 import AddOriginator from "@/components/AddOriginator";
+import DeployedPools from "@/components/DeployedPools";
 
 const Admin = () => {
   return (
@@ -10,6 +12,9 @@ const Admin = () => {
         <div className="w-full">
           <div className="mb-4">
             <DeployPool />
+          </div>
+          <div className="mb-4">
+            <DeployedPools />
           </div>
           <div className="mb-4">
             <AddInvestor />

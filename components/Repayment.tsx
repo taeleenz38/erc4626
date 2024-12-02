@@ -12,7 +12,7 @@ const Repayment = () => {
   return (
     <>
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-3">
+        <AccordionItem value="item-4">
           <AccordionTrigger className="font-bold">Repayment</AccordionTrigger>
           <AccordionContent>
             <div className="w-full items-center gap-1.5 mb-5">
