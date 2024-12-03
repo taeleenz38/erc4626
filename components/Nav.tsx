@@ -29,6 +29,10 @@ const links = [
     path: "/borrower",
     wallet: process.env.NEXT_PUBLIC_BORROWER_WALLET_ADDRESS,
   },
+  {
+    name: "pools",
+    path: "/pools",
+  },
 ];
 
 const Nav = () => {
