@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import abi from "@/artifacts/Vault.json";
 import { useAccount } from "wagmi";
+import { BigNumber } from "ethers";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { config } from "@/config";
 
@@ -27,11 +28,14 @@ const Withdraw = () => {
 
   const handleWithdraw = async () => {
     try {
+      const amountInWei = BigNumber.from(amount).mul(
+        BigNumber.from(10).pow(18)
+      );
       const tx = await writeContractAsync({
         abi: abi.abi,
         address: process.env.NEXT_PUBLIC_VAULT_ADDRESS as `0x${string}`,
         functionName: "withdraw",
-        args: [amount, address, address],
+        args: [amountInWei, address, address],
       });
       setTxHash(tx);
     } catch (error) {
