@@ -1,12 +1,19 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -14,21 +21,35 @@ import abi from "@/artifacts/Vault.json";
 import { useAccount } from "wagmi";
 import { BigNumber } from "ethers";
 import { useWriteContract } from "wagmi";
+import { fetchVaultContracts } from "@/utils/graph-client";
 import { config } from "@/config";
 
 const DepositYield = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
-  const [poolCa, setPoolCa] = useState<string>("");
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [vaultContracts, setVaultContracts] = useState([]);
   const { writeContractAsync, isPending } = useWriteContract({ config });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchVaultContracts();
+        setVaultContracts(data);
+      } catch (error) {
+        console.error("Error fetching vault contracts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
-  };
-
-  const onPoolCaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPoolCa(e.target.value);
   };
 
   const handleDepositYield = async () => {
@@ -38,7 +59,7 @@ const DepositYield = () => {
       );
       const tx = await writeContractAsync({
         abi: abi.abi,
-        address: poolCa as `0x${string}`,
+        address: selectedAddress as `0x${string}`,
         functionName: "depositYield",
         args: [address, amountInWei],
       });
@@ -56,18 +77,22 @@ const DepositYield = () => {
             Deposit Yield
           </AccordionTrigger>
           <AccordionContent>
-            <div className="w-full items-center gap-1.5 mb-5">
-              <Label htmlFor="amount">Pool</Label>
-              <Input
-                className="w-full mt-2"
-                type="text"
-                id="pool"
-                placeholder="Enter the pool's CA:"
-                onChange={onPoolCaChange}
-                value={poolCa}
-              />
-            </div>
-            <div className="w-full items-center gap-1.5 mb-5">
+            <Select onValueChange={(value) => setSelectedAddress(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Pool CA" />
+              </SelectTrigger>
+              <SelectContent className="bg-black">
+                {vaultContracts.map((contract) => (
+                  <SelectItem
+                    key={contract.id}
+                    value={contract.vaultContractAddress}
+                  >
+                    {contract.vaultContractAddress}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="w-full items-center gap-1.5 my-5">
               <Label htmlFor="amount">Amount</Label>
               <Input
                 className="w-full mt-2"
