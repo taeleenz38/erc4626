@@ -19,11 +19,16 @@ import { config } from "@/config";
 const Withdraw = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
+  const [poolCa, setPoolCa] = useState<string>("");
   const [txHash, setTxHash] = useState<string | null>(null);
   const { writeContractAsync, isPending } = useWriteContract({ config });
 
   const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
+  };
+
+  const onPoolCaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPoolCa(e.target.value);
   };
 
   const handleWithdraw = async () => {
@@ -33,7 +38,7 @@ const Withdraw = () => {
       );
       const tx = await writeContractAsync({
         abi: abi.abi,
-        address: process.env.NEXT_PUBLIC_VAULT_ADDRESS as `0x${string}`,
+        address: poolCa as `0x${string}`,
         functionName: "withdraw",
         args: [amountInWei, address, address],
       });
@@ -48,7 +53,18 @@ const Withdraw = () => {
       <Accordion type="single" collapsible>
         <AccordionItem value="item-2">
           <AccordionTrigger className="font-bold">Withdraw</AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent className="flex-col w-full justify-center items-center">
+            <div className="w-full items-center gap-1.5 mb-5">
+              <Label htmlFor="amount">Pool</Label>
+              <Input
+                className="w-full mt-2"
+                type="text"
+                id="pool"
+                placeholder="Enter the pool's CA:"
+                onChange={onPoolCaChange}
+                value={poolCa}
+              />
+            </div>
             <div className="w-full items-center gap-1.5 mb-5">
               <Label htmlFor="amount">Amount</Label>
               <Input

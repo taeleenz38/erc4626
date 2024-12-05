@@ -16,7 +16,7 @@ import { BigNumber } from "ethers";
 import { useWriteContract } from "wagmi";
 import { config } from "@/config";
 
-const Deposit = () => {
+const DepositYield = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
   const [poolCa, setPoolCa] = useState<string>("");
@@ -31,7 +31,7 @@ const Deposit = () => {
     setPoolCa(e.target.value);
   };
 
-  const handleDeposit = async () => {
+  const handleDepositYield = async () => {
     try {
       const amountInWei = BigNumber.from(amount).mul(
         BigNumber.from(10).pow(18)
@@ -39,8 +39,8 @@ const Deposit = () => {
       const tx = await writeContractAsync({
         abi: abi.abi,
         address: poolCa as `0x${string}`,
-        functionName: "deposit",
-        args: [amountInWei, address],
+        functionName: "depositYield",
+        args: [address, amountInWei],
       });
       setTxHash(tx);
     } catch (error) {
@@ -51,9 +51,11 @@ const Deposit = () => {
   return (
     <>
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="font-bold">Deposit</AccordionTrigger>
-          <AccordionContent className="flex-col w-full justify-center items-center">
+        <AccordionItem value="item-4">
+          <AccordionTrigger className="font-bold">
+            Deposit Yield
+          </AccordionTrigger>
+          <AccordionContent>
             <div className="w-full items-center gap-1.5 mb-5">
               <Label htmlFor="amount">Pool</Label>
               <Input
@@ -78,10 +80,10 @@ const Deposit = () => {
             </div>
             <Button
               className="w-full font-bold"
-              onClick={handleDeposit}
+              onClick={handleDepositYield}
               disabled={isPending}
             >
-              Deposit
+              Deposit Yield
             </Button>
           </AccordionContent>
         </AccordionItem>
@@ -90,4 +92,4 @@ const Deposit = () => {
   );
 };
 
-export default Deposit;
+export default DepositYield;

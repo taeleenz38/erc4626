@@ -1,6 +1,6 @@
 import React from "react";
 import IssueLoan from "@/components/IssueLoan";
-import FundLoan from "@/components/FundLoan";
+import DepositYield from "@/components/DepositYield";
 
 const Originator = () => {
   return (
@@ -10,7 +10,7 @@ const Originator = () => {
           <IssueLoan />
         </div>
         <div className="w-[48%]">
-          <FundLoan />
+          <DepositYield />
         </div>
       </div>
     </div>
