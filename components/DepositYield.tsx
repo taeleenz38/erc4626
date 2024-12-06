@@ -54,9 +54,7 @@ const DepositYield = () => {
 
   const handleDepositYield = async () => {
     try {
-      const amountInWei = BigNumber.from(amount).mul(
-        BigNumber.from(10).pow(18)
-      );
+      const amountInWei = BigNumber.from(amount).mul(BigNumber.from(10).pow(6));
       const tx = await writeContractAsync({
         abi: abi.abi,
         address: selectedAddress as `0x${string}`,
@@ -72,7 +70,7 @@ const DepositYield = () => {
   return (
     <>
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-4">
+        <AccordionItem value="item-2">
           <AccordionTrigger className="font-bold">
             Deposit Yield
           </AccordionTrigger>

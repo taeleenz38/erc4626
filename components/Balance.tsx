@@ -17,6 +17,7 @@ import { fetchVaultContracts } from "@/utils/graph-client";
 import { useAccount } from "wagmi";
 import { useReadContract } from "wagmi";
 import { abi } from "@/artifacts/Vault.json";
+import { BigNumber } from "ethers"; // Import BigNumber
 
 const Balance = () => {
   const { address } = useAccount();
@@ -51,6 +52,18 @@ const Balance = () => {
     fetchData();
   }, []);
 
+  // Helper to format balance
+  const formatBalance = (balance) => {
+    if (!balance) return "0";
+    try {
+      const value = BigNumber.from(balance).div(BigNumber.from(10).pow(6));
+      return value.toString();
+    } catch (error) {
+      console.error("Error formatting balance:", error);
+      return "Error";
+    }
+  };
+
   return (
     <>
       <Accordion type="single" collapsible>
@@ -83,7 +96,7 @@ const Balance = () => {
                 ) : error ? (
                   <p>Error fetching balance</p>
                 ) : (
-                  <p>Balance: {balance}</p>
+                  <p>Balance: {formatBalance(balance)}</p>
                 )}
               </div>
             )}
