@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import abi from "@/artifacts/Vault.json";
 import { useAccount } from "wagmi";
 import { BigNumber } from "ethers";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { fetchVaultContracts } from "@/utils/graph-client";
 import { config } from "@/config";
 
@@ -28,6 +28,7 @@ const DepositYield = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [txHash2, setTxHash2] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [vaultContracts, setVaultContracts] = useState([]);
@@ -57,15 +58,45 @@ const DepositYield = () => {
       const amountInWei = BigNumber.from(amount).mul(BigNumber.from(10).pow(6));
       const tx = await writeContractAsync({
         abi: abi.abi,
-        address: selectedAddress as `0x${string}`,
-        functionName: "depositYield",
-        args: [address, amountInWei],
+        address: process.env.NEXT_PUBLIC_ASSET_ADDRESS,
+        functionName: "approve",
+        args: [selectedAddress as `0x${string}`, amountInWei],
       });
+
       setTxHash(tx);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  const { data: approvalReceipt, isLoading: isApprovalLoading } =
+    useWaitForTransactionReceipt({
+      hash: txHash as `0x${string}`,
+    });
+
+  useEffect(() => {
+    if (approvalReceipt) {
+      const DepositTransaction = async () => {
+        try {
+          const depositAmount = BigNumber.from(amount).mul(
+            BigNumber.from(10).pow(6)
+          );
+
+          const tx2 = await writeContractAsync({
+            abi: abi.abi,
+            address: selectedAddress as `0x${string}`,
+            functionName: "depositYield",
+            args: [address, depositAmount],
+          });
+          setTxHash2(tx2);
+        } catch (error) {
+          console.error("Error during deposit:", error);
+        }
+      };
+
+      DepositTransaction();
+    }
+  }, [amount, writeContractAsync, approvalReceipt, address, selectedAddress]);
 
   return (
     <>

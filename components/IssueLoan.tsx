@@ -13,18 +13,17 @@ import { Button } from "@/components/ui/button";
 import abi from "@/artifacts/LoanManager.json";
 import { useAccount } from "wagmi";
 import { BigNumber } from "ethers";
+import { ethers } from "ethers";
 import { useWriteContract } from "wagmi";
 import { config } from "@/config";
 
 const IssueLoan = () => {
   const { address } = useAccount();
   const [borrower, setBorrower] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
   const [interest, setInterest] = useState<string>("");
   const [principal, setPrincipal] = useState<string>("");
   const [start, setStart] = useState<string>("");
   const [maturity, setMaturity] = useState<string>("");
-  const [data, setData] = useState<string>("");
   const [txHash, setTxHash] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { writeContractAsync, isPending } = useWriteContract({ config });
@@ -53,28 +52,30 @@ const IssueLoan = () => {
     setMaturity(e.target.value);
   };
 
-  const onDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData(e.target.value);
-  };
-
   const handleIssueLoan = async () => {
     try {
-      const amountInWei = BigNumber.from(amount).mul(
+      const interestRate = BigNumber.from(interest).mul(
         BigNumber.from(10).pow(18)
       );
+      const principalAmount = BigNumber.from(principal).mul(
+        BigNumber.from(10).pow(6)
+      );
+
+      const startTimestamp = Math.floor(new Date(start).getTime() / 1000);
+      const maturityTimestamp = Math.floor(new Date(maturity).getTime() / 1000);
+
       const tx = await writeContractAsync({
         abi: abi.abi,
         address: process.env.NEXT_PUBLIC_LOAN_MANAGER_ADDRESS as `0x${string}`,
         functionName: "issueLoan",
         args: [
-          borrower,
-          amountInWei,
+          borrower as `0x${string}`,
           "",
-          interest,
-          principal,
-          start,
-          maturity,
-          data,
+          interestRate,
+          principalAmount,
+          startTimestamp,
+          maturityTimestamp,
+          ethers.constants.HashZero,
         ],
       });
       setTxHash(tx);
@@ -101,18 +102,7 @@ const IssueLoan = () => {
               />
             </div>
             <div className="w-full items-center gap-1.5 mb-5">
-              <Label htmlFor="amount">Amount</Label>
-              <Input
-                className="w-full mt-2"
-                type="text"
-                id="amount"
-                placeholder="Enter the loan amount:"
-                onChange={onAmountChange}
-                value={amount}
-              />
-            </div>
-            <div className="w-full items-center gap-1.5 mb-5">
-              <Label htmlFor="interest">Interest Rate</Label>
+              <Label htmlFor="interest">Interest Rate (%)</Label>
               <Input
                 className="w-full mt-2"
                 type="text"
@@ -137,7 +127,7 @@ const IssueLoan = () => {
               <Label htmlFor="start">Start Date</Label>
               <Input
                 className="w-full mt-2"
-                type="text"
+                type="date"
                 id="start"
                 placeholder="Enter the start date:"
                 onChange={onStartChange}
@@ -148,22 +138,11 @@ const IssueLoan = () => {
               <Label htmlFor="maturity">Maturity Date</Label>
               <Input
                 className="w-full mt-2"
-                type="text"
+                type="date"
                 id="maturity"
                 placeholder="Enter the maturity date:"
                 onChange={onMaturityChange}
                 value={maturity}
-              />
-            </div>
-            <div className="w-full items-center gap-1.5 mb-5">
-              <Label htmlFor="data">Data</Label>
-              <Input
-                className="w-full mt-2"
-                type="text"
-                id="data"
-                placeholder="Enter the data:"
-                onChange={onDataChange}
-                value={data}
               />
             </div>
             <Button

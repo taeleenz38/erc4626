@@ -33,6 +33,11 @@ const links = [
     name: "pools",
     path: "/pools",
   },
+  {
+    name: "loans",
+    path: "/loans",
+    wallet: process.env.NEXT_PUBLIC_ORIGINATOR_WALLET_ADDRESS,
+  },
 ];
 
 const Nav = () => {

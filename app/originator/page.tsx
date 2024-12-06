@@ -1,6 +1,7 @@
 import React from "react";
 import IssueLoan from "@/components/IssueLoan";
 import DepositYield from "@/components/DepositYield";
+import Drawdown from "@/components/Drawdown";
 
 const Originator = () => {
   return (
@@ -9,8 +10,9 @@ const Originator = () => {
         <div className="w-[48%]">
           <IssueLoan />
         </div>
-        <div className="w-[48%]">
+        <div className="w-[48%] flex-col">
           <DepositYield />
+          <Drawdown />
         </div>
       </div>
     </div>

@@ -73,7 +73,7 @@ const AddOriginator = () => {
               />
             </div>
             <Button className="w-full font-bold" onClick={handleAddOriginator}>
-              Add Investor To Pool
+              Add Originator To Pool
             </Button>
           </AccordionContent>
         </AccordionItem>
