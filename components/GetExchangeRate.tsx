@@ -58,7 +58,7 @@ const GetExchangeRate = () => {
       <Accordion type="single" collapsible>
         <AccordionItem value="item-4">
           <AccordionTrigger className="font-bold">
-            Get Exchange Rate
+            LP Token Value
           </AccordionTrigger>
           <AccordionContent>
             {loading ? (
@@ -87,7 +87,7 @@ const GetExchangeRate = () => {
                 ) : error ? (
                   <p>Error fetching exchange rate</p>
                 ) : (
-                  <p>Exchange Rate: {formattedExchangeRate}</p>
+                  <p>Value: ${formattedExchangeRate}</p>
                 )}
               </div>
             )}

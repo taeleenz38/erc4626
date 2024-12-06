@@ -68,7 +68,7 @@ const Balance = () => {
     <>
       <Accordion type="single" collapsible>
         <AccordionItem value="item-4">
-          <AccordionTrigger className="font-bold">Get Balance</AccordionTrigger>
+          <AccordionTrigger className="font-bold">LP Token Balance</AccordionTrigger>
           <AccordionContent>
             {loading ? (
               <p>Loading...</p>
